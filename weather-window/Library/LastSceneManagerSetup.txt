@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/joohyun/Scene/test.unity
+- path: Assets/Scenes/city_prefab.unity
   isLoaded: 1
   isActive: 1

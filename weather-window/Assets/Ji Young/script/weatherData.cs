@@ -2,13 +2,13 @@
 using System.Collections;
 using SimpleJSON;
 using UnityEngine.UI;
-
+using System;
 
 
 public class weatherData : MonoBehaviour
 {
-    private string cityName = "London";
-    private string countryCode = "uk";
+    private string cityName = "New York";
+    private string countryCode = "us";
     private string weatherDescription;
     private float temp;
     private float tempMin;
@@ -16,8 +16,10 @@ public class weatherData : MonoBehaviour
     private float rain;
     private float snow;
     private float humidity;
-    private float sunrise;
-    private float sunset;
+    private int sunrise;
+    private int sunset;
+    private string sunriseConverted;
+    private string sunsetConverted;
 
     public Text cityInformation;
     public Text weatherInformation;
@@ -40,7 +42,7 @@ public class weatherData : MonoBehaviour
 
     public Slider mainSlider;
     public Button firstButton, secondButton, thirdButton;
-   
+
     private string APPID;
     private string url;
 
@@ -52,6 +54,14 @@ public class weatherData : MonoBehaviour
     public GameObject London;
     public GameObject Paris;
 
+    public static string Epoch2string(float epoch)
+    {
+        return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epoch).ToShortTimeString();
+
+
+    }
+
+
 
     void Start()
     {
@@ -60,7 +70,7 @@ public class weatherData : MonoBehaviour
         secondButton.onClick.AddListener(delegate { TaskOnClick("second"); });
         thirdButton.onClick.AddListener(delegate { TaskOnClick("third"); });
 
-        APPID = "&appid=08d5f1e9858dc88e49fe968e268f17a5";
+        APPID = "&appid=8b22284bb369ea046ff4d3b96af103ad";
         url = "http://api.openweathermap.org/data/2.5/";
 
         StartCoroutine(getWeatherData());
@@ -71,7 +81,7 @@ public class weatherData : MonoBehaviour
     {
         WWW weatherRequest = new WWW(url + "weather?q=" + cityName + "," + countryCode + APPID);
 
-        Debug.Log(weatherRequest);
+        Debug.Log(weatherRequest + "happening!!!!!!");
 
         yield return weatherRequest;
         if (weatherRequest.error == null || weatherRequest.error == "")
@@ -98,6 +108,9 @@ public class weatherData : MonoBehaviour
         }
     }
 
+
+
+
     void setWeatherAttributes(string jsonString)
     {
         var weatherJson = JSON.Parse(jsonString);
@@ -110,9 +123,13 @@ public class weatherData : MonoBehaviour
         //rain = weatherJson["main"]["rain"].AsFloat;
         //snow = weatherJson["main"]["snow"].AsFloat;
         //humidity = weatherJson["main"]["humidity"].AsFloat;
-        sunrise = weatherJson["sys"]["sunrise"].AsFloat;
-        sunset = weatherJson["sys"]["sunset"].AsFloat;
+        sunrise = weatherJson["sys"]["sunrise"].AsInt;
+        sunset = weatherJson["sys"]["sunset"].AsInt;
 
+        sunsetConverted = Epoch2string(sunset);
+        sunriseConverted = Epoch2string(sunrise);
+
+        Debug.Log("sunsetConverted: " + sunsetConverted);
         Debug.Log("city: " + cityName);
         Debug.Log("weatherDescription: " + weatherDescription);
         Debug.Log("temp: " + temp);
@@ -131,6 +148,9 @@ public class weatherData : MonoBehaviour
         tempInformation.text = convertKtoF(temp).ToString() + "° F";
         tempMinInformation.text = convertKtoF(tempMin).ToString() + "° F";
         tempMaxInformation.text = convertKtoF(tempMax).ToString() + "° F";
+
+
+
 
         if (cityName == "New York")
         {
@@ -170,36 +190,36 @@ public class weatherData : MonoBehaviour
     void setForecastAttributes(string jsonString, int n)
     {
         var weatherJson = JSON.Parse(jsonString);
-       
-            Debug.Log("what time segment: " + n);
-            //forecast
-            timeForecast = weatherJson["list"][n]["dt_txt"].Value;
-            weatherDescriptionForecast = weatherJson["list"][n]["weather"][0]["description"].Value;
-            tempForecast = weatherJson["list"][n]["main"]["temp"].AsFloat;
-            tempMinForecast = weatherJson["list"][n]["main"]["temp_min"].AsFloat;
-            tempMaxForecast = weatherJson["list"][n]["main"]["temp_max"].AsFloat;
-            windspeedForecast = weatherJson["list"][n]["wind"]["speed"].AsFloat;
-            rainForecast = weatherJson["list"][n]["rain"]["3h"];
-            snowForecast = weatherJson["list"][n]["snow"]["3h"];
 
-            Debug.Log("timeForecast: " + n + timeForecast);
-            Debug.Log("weatherDescriptionForecast: " + n + weatherDescriptionForecast);
-            Debug.Log("tempForecast: " + n + tempForecast);
-            Debug.Log("tempMinForecast: " + n + tempMinForecast);
-            Debug.Log("tempMaxForecast: " + n + tempMaxForecast);
-            Debug.Log("windspeedForecast: " + n + windspeedForecast);
-            Debug.Log("rainForecast: " + rainForecast);
-            Debug.Log("snowForecast: " + snowForecast);
+        Debug.Log("what time segment: " + n);
+        //forecast
+        timeForecast = weatherJson["list"][n]["dt_txt"].Value;
+        weatherDescriptionForecast = weatherJson["list"][n]["weather"][0]["description"].Value;
+        tempForecast = weatherJson["list"][n]["main"]["temp"].AsFloat;
+        tempMinForecast = weatherJson["list"][n]["main"]["temp_min"].AsFloat;
+        tempMaxForecast = weatherJson["list"][n]["main"]["temp_max"].AsFloat;
+        windspeedForecast = weatherJson["list"][n]["wind"]["speed"].AsFloat;
+        rainForecast = weatherJson["list"][n]["rain"]["3h"];
+        snowForecast = weatherJson["list"][n]["snow"]["3h"];
 
-            weatherInformation.text = weatherDescriptionForecast;
-            sunriseInformation.text = "sunrise: " + sunrise.ToString();
-            sunsetInformation.text = "sunset: " + sunset.ToString();
-            tempInformation.text = convertKtoF(tempForecast).ToString() + "° F";
-            tempMinInformation.text = convertKtoF(tempMinForecast).ToString() + "° F";
-            tempMaxInformation.text = convertKtoF(tempMaxForecast).ToString() + "° F";
-     
+        Debug.Log("timeForecast: " + n + timeForecast);
+        Debug.Log("weatherDescriptionForecast: " + n + weatherDescriptionForecast);
+        Debug.Log("tempForecast: " + n + tempForecast);
+        Debug.Log("tempMinForecast: " + n + tempMinForecast);
+        Debug.Log("tempMaxForecast: " + n + tempMaxForecast);
+        Debug.Log("windspeedForecast: " + n + windspeedForecast);
+        Debug.Log("rainForecast: " + rainForecast);
+        Debug.Log("snowForecast: " + snowForecast);
 
-        if (rainForecast> 0)
+        weatherInformation.text = weatherDescriptionForecast;
+        sunriseInformation.text = "sunrise: " + sunriseConverted;
+        sunsetInformation.text = "sunset: " + sunsetConverted;
+        tempInformation.text = convertKtoF(tempForecast).ToString() + "° F";
+        tempMinInformation.text = convertKtoF(tempMinForecast).ToString() + "° F";
+        tempMaxInformation.text = convertKtoF(tempMaxForecast).ToString() + "° F";
+
+
+        if (rainForecast > 0.02f)
         {
             Debug.Log("It's raining!!!");
             raining.SetActive(true);
@@ -210,7 +230,7 @@ public class weatherData : MonoBehaviour
             raining.SetActive(false);
         }
 
-        if (snowForecast > 0)
+        if (snowForecast > 0.02f)
         {
             Debug.Log("It's snowing!!!");
             snowing.SetActive(true);
@@ -233,7 +253,7 @@ public class weatherData : MonoBehaviour
         }
 
         Debug.Log("end of forecast results");
-         
+
     }
 
     float convertKtoF(float temperature)
@@ -253,8 +273,8 @@ public class weatherData : MonoBehaviour
 
         for (int i = 0; i < 8; i++)
         {
-      
-            if (mainSlider.value >= i / 8f && mainSlider.value <= (i+1) / 8f)
+
+            if (mainSlider.value >= i / 8f && mainSlider.value <= (i + 1) / 8f)
             {
                 StartCoroutine(getForecastData(i));
                 Debug.Log("getting the data: " + i);

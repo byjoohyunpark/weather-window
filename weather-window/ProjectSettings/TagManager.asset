@@ -6,6 +6,8 @@ TagManager:
   tags:
   - snow
   - rain
+  - playAnimation
+  - debugPlanes
   layers:
   - Default
   - TransparentFX

@@ -55,6 +55,7 @@
   <ItemGroup>
      <Compile Include="Assets\davon\changeGradientColor.cs" />
      <Compile Include="Assets\davon\sun\rotateSun.cs" />
+     <Compile Include="Assets\fix_position.cs" />
      <Compile Include="Assets\Ji Young\script\weatherData.cs" />
      <Compile Include="Assets\joohyun\RainMaker\Demo\DemoScript.cs" />
      <Compile Include="Assets\joohyun\RainMaker\Demo\DemoScript2D.cs" />
@@ -65,6 +66,7 @@
      <Compile Include="Assets\joohyun\RainMaker\Prefab\RainScript2D.cs" />
      <Compile Include="Assets\joohyun\Realistic Hail Set\Demo Scene\Scripts\DemoSceneController.cs" />
      <Compile Include="Assets\lookat.cs" />
+     <Compile Include="Assets\moving_script.cs" />
      <Compile Include="Assets\UIraycaster.cs" />
      <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ARKitFaceTrackingRemoteConnection.cs" />
      <Compile Include="Assets\UnityARKitPlugin\ARKitRemote\ARKitRemoteConnection.cs" />
